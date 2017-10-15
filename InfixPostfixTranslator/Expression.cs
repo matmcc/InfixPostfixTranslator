@@ -12,6 +12,12 @@ showInfix: Outputs the infix expression.
 showPostfix: Outputs the postfix expression
 */
 
+
+//Notes
+//    allowing setting of AllowedSymbols at any time complicates other parts of prgoram - e.g. testing and pushing to stack
+//    potential for more breaking errors
+//    Also allowing setting these at ctor breaks validification in getINput
+
 namespace InfixPostfixTranslator
 {
     class Expression
