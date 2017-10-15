@@ -10,6 +10,9 @@ namespace InfixPostfixTranslator
     {
         static void Main(string[] args)
         {
+            var _ = new Expression();
+            _.getInfix();
+            _.showInfix();
         }
     }
 }
