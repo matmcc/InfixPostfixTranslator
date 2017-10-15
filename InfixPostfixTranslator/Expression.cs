@@ -30,25 +30,25 @@ namespace InfixPostfixTranslator
             Console.WriteLine(Infix);
         }
 
-        public void getInfix()
+        public void GetInfix()
         {
             Console.WriteLine("Enter infix expression: ");
             string input = Console.ReadLine();
-            string[] tokens = input.Split(' ');
+
+            // Below checks input - do we want this testing here? or later, e.g. in translator? Fail Fast - here
+            var tokens = input.ToCharArray();   // tried splitting at whitespace, too fragile, e.g. 2 * (3 + 1) would fail
             bool _allCharsAllowed = false;
-            foreach (string c in tokens)
+            foreach (char c in tokens)
             {
-                double temp;
-                if (double.TryParse(c, out temp) || AllowedSymbols.Contains(c))
-                { _allCharsAllowed = true;
-                    Console.WriteLine(c + " " + temp);
-                }
+                double temp;    // double to enable more numerical input (not spec'd in problem)... but is double.TryParse(c.ToString() below efficient?
+                if (double.TryParse(c.ToString(), out temp) || AllowedSymbols.Contains(c) || Char.IsWhiteSpace(c))
+                { _allCharsAllowed = true; }
                 else { _allCharsAllowed = false; }
             }
 
             if (!_allCharsAllowed)
             {
-                Console.WriteLine($"Only numbers and symbols: {AllowedSymbols} are valid");
+                Console.WriteLine($"Only numbers and symbols: {AllowedSymbols} are valid input");
             }
             else
             {
@@ -56,9 +56,14 @@ namespace InfixPostfixTranslator
             }
         }
 
-        public void showInfix()
+        public void ShowInfix()
         {
             Console.WriteLine(Infix);
+        }
+
+        public void ShowPostfix()
+        {
+            throw new NotImplementedException();
         }
 
     }
