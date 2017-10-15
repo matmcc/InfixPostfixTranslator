@@ -26,16 +26,15 @@ namespace InfixPostfixTranslator
         {
             this.Infix = infix;
             this.AllowedSymbols = symbols;
-            Console.WriteLine(AllowedSymbols);
-            Console.WriteLine(Infix);
         }
+        // TODO: input checking below does not apply to string arg's to constructor - inconsistent, should they be removed?
 
         public void GetInfix()
         {
             Console.WriteLine("Enter infix expression: ");
             string input = Console.ReadLine();
 
-            // Below checks input - do we want this testing here? or later, e.g. in translator? Fail Fast - here
+            // TODO: Below checks input - do we want this testing here? or later, e.g. in translator? Fail Fast - here
             var tokens = input.ToCharArray();   // tried splitting at whitespace, too fragile, e.g. 2 * (3 + 1) would fail
             bool _allCharsAllowed = false;
             foreach (char c in tokens)
