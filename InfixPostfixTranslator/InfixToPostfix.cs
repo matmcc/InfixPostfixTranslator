@@ -8,9 +8,9 @@ namespace InfixPostfixTranslator
         internal static string Convert(string infix)
         {
             string _postfix = "";
-            string operands = "0123456789";
+            //string operands = "0123456789";
             string operators = "*/+-";
-            var _operandSet = new HashSet<char>(operands);
+            //var _operandSet = new HashSet<char>(operands);
             var _operatorSet = new HashSet<char>(operators);
 
             var _stack = new Stack<char>();
@@ -18,7 +18,8 @@ namespace InfixPostfixTranslator
 
             foreach (char c in tokens)
             {
-                if (_operandSet.Contains(c))
+                //if (Char.IsLetterOrDigit(c) || c == ' ')    // previously _operandSet.Contains(c)
+                if (Char.IsLetterOrDigit(c))    // don't want whitespace?
                 { _postfix += c; }
                 else if (c == '(')
                 { _stack.Push(c); }
