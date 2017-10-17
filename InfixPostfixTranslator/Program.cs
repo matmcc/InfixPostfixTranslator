@@ -12,7 +12,11 @@ namespace InfixPostfixTranslator
         {
             var _ = new Expression();
             _.GetInfix();
+            Console.WriteLine("The Infix you have entered is :");
             _.ShowInfix();
+            Console.WriteLine("The Postfix equivalent is :");
+            _.ConvertToPostfix(_.ReturnInfix());
+            _.ShowPostfix();
         }
     }
 }

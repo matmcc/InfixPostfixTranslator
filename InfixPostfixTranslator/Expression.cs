@@ -14,18 +14,20 @@ showPostfix: Outputs the postfix expression
 
 
 //Notes
-//    allowing setting of AllowedSymbols at any time complicates other parts of prgoram - e.g. testing and pushing to stack
+//    allowing setting of AllowedSymbols at any time complicates other parts of program - e.g. testing and pushing to stack
 //    potential for more breaking errors
-//    Also allowing setting these at ctor breaks validification in getINput
+//    Also allowing setting these at ctor breaks validification in getInput
 
 namespace InfixPostfixTranslator
 {
     class Expression
     {
         private string _infix = "";
+        private string _postfix = "";
         private string allowedSymbols = "";
 
         protected string Infix { get { return _infix; } private set { _infix = value; } }
+        protected string Postfix { get { return _postfix; } set { _postfix = value; } }
         protected string AllowedSymbols { get => allowedSymbols; set => allowedSymbols = value; } // why different?
 
         public Expression(string infix = "", string symbols = "()*/+-")
@@ -45,7 +47,7 @@ namespace InfixPostfixTranslator
             bool _allCharsAllowed = false;
             foreach (char c in tokens)
             {
-                double temp;    // double to enable more numerical input (not spec'd in problem)... but is double.TryParse(c.ToString() below efficient?
+                double temp;    // double to enable more numerical input (not spec'd in problem)... but is double.TryParse(c.ToString()) below efficient?
                 if (double.TryParse(c.ToString(), out temp) || AllowedSymbols.Contains(c) || Char.IsWhiteSpace(c))
                 { _allCharsAllowed = true; }
                 else { _allCharsAllowed = false; }
@@ -61,6 +63,13 @@ namespace InfixPostfixTranslator
             }
         }
 
+        public string ConvertToPostfix(string infix)
+        {
+            var ret = InfixToPostfix.Convert(infix);
+            Postfix = ret;
+            return ret;
+        }
+
         public void ShowInfix()
         {
             Console.WriteLine(Infix);
@@ -68,8 +77,12 @@ namespace InfixPostfixTranslator
 
         public void ShowPostfix()
         {
-            throw new NotImplementedException();
+            Console.WriteLine(Postfix);
         }
+
+        public string ReturnInfix() => Infix;
+        public string ReturnPostFix() => Postfix;
+
 
     }
 }
