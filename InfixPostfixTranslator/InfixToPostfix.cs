@@ -59,7 +59,7 @@ namespace InfixPostfixTranslator
         {
             if (this_ == other) // quick escape
             { return true; }
-            else if (this_ == '+' || this_ == '-')
+            else if (this_ == '+' || this_ == '-')  // could ! this to escape earlier? since */ => true
             {
                 if (other == '+' || other == '-')
                 { return true; }

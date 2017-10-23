@@ -28,7 +28,7 @@ namespace InfixPostfixTranslator
 
         protected string Infix { get { return _infix; } private set { _infix = value; } }
         protected string Postfix { get { return _postfix; } set { _postfix = value; } }
-        protected string AllowedSymbols { get => allowedSymbols; set => allowedSymbols = value; } // why different?
+        protected string AllowedSymbols { get { return allowedSymbols; } set { allowedSymbols = value; } }
 
         public Expression(string infix = "", string symbols = "()*/+-")
         {
