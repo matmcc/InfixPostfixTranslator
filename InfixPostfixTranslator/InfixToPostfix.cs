@@ -46,6 +46,7 @@ namespace InfixPostfixTranslator
                         _stack.Push(c);
                     }
                 }
+                // else throw exception here ?
             }
             for (int i = 0; i < _stack.Count; i++)
             {

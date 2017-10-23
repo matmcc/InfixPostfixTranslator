@@ -47,8 +47,8 @@ namespace InfixPostfixTranslator
             bool _allCharsAllowed = false;
             foreach (char c in tokens)
             {
-                //double temp;    // double to enable more numerical input (not spec'd in problem)... but is double.TryParse(c.ToString()) below efficient?
-                if (Char.IsLetterOrDigit(c) || AllowedSymbols.Contains(c) || Char.IsWhiteSpace(c))
+                // Currently allows letters, numbers, whitespace, AllowedSymbols as input
+                if (Char.IsLetterOrDigit(c) || Char.IsWhiteSpace(c) || AllowedSymbols.Contains(c))
                 { _allCharsAllowed = true; }
                 else { _allCharsAllowed = false; }
             }
