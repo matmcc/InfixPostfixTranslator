@@ -10,13 +10,13 @@ namespace InfixPostfixTranslator
     {
         static void Main(string[] args)
         {
-            var _ = new Expression();
-            _.GetInfix();
+            var testRun = new Expression();
+            testRun.GetInfix();
             Console.WriteLine("The Infix you have entered is :");
-            _.ShowInfix();
+            testRun.ShowInfix();
             Console.WriteLine("The Postfix equivalent is :");
-            _.ConvertToPostfix(_.ReturnInfix());
-            _.ShowPostfix();
+            testRun.ConvertToPostfix(testRun.ReturnInfix());
+            testRun.ShowPostfix();
         }
     }
 }

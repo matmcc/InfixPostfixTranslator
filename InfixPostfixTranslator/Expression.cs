@@ -26,6 +26,7 @@ namespace InfixPostfixTranslator
         private string _postfix = "";
         private string allowedSymbols = "";
 
+        // TODO: Should setters be private?
         protected string Infix { get { return _infix; } private set { _infix = value; } }
         protected string Postfix { get { return _postfix; } set { _postfix = value; } }
         protected string AllowedSymbols { get { return allowedSymbols; } set { allowedSymbols = value; } }
@@ -63,11 +64,9 @@ namespace InfixPostfixTranslator
             }
         }
 
-        public string ConvertToPostfix(string infix)
+        public void ConvertToPostfix(string infix)
         {
-            var ret = InfixToPostfix.Convert(infix);
-            Postfix = ret;
-            return ret;
+            Postfix = InfixToPostfix.Convert(infix);
         }
 
         public void ShowInfix()

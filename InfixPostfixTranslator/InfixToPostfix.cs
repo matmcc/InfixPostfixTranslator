@@ -53,6 +53,7 @@ namespace InfixPostfixTranslator
                 _postfix += _stack.Pop();
             }
 
+            _postfix = String.Join(" ", _postfix.ToCharArray()); // to space _postfix
             return _postfix;
         }
 
