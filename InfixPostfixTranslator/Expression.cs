@@ -27,7 +27,7 @@ namespace InfixPostfixTranslator
         private string allowedSymbols = "";
 
         // TODO: Should setters be private?
-        protected string Infix { get { return _infix; } private set { _infix = value; } }
+        protected string Infix { get { return _infix; } set { _infix = value; } }
         protected string Postfix { get { return _postfix; } set { _postfix = value; } }
         protected string AllowedSymbols { get { return allowedSymbols; } set { allowedSymbols = value; } }
 

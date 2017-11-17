@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 //  TODO: Kepp in separate files?
 //  TODO: Resolve issue re: symbols in Expression class constructor
@@ -25,13 +21,66 @@ namespace InfixPostfixTranslator
     {
         static void Main(string[] args)
         {
-            var testRun = new Expression();
-            testRun.GetInfix();
+            TestRun();
+            //TestStack();
+
+        }
+
+        public static void TestRun()
+        {
+            var expressionInstance = new Expression();
+            expressionInstance.GetInfix();
             Console.WriteLine("The Infix you have entered is :");
-            testRun.ShowInfix();
+            expressionInstance.ShowInfix();
             Console.WriteLine("The Postfix equivalent is :");
-            testRun.ConvertToPostfix(testRun.ReturnInfix());
-            testRun.ShowPostfix();
+            var returnedPostfix = expressionInstance.ReturnInfix();
+            expressionInstance.ConvertToPostfix(returnedPostfix);
+            expressionInstance.ShowPostfix();
+        }
+
+        public static void TestStack()
+        {
+
+            try
+            {
+                new GenStack<int>(-500);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Hooray, couldn't create a negative sized stack");
+            }
+
+            var myStack = new GenStack<int>(3);
+
+            try
+            {
+                myStack.Pop();
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("Hooray, it was empty and failed. :-)");
+            }
+
+            myStack.Push(1);
+            myStack.Push(2);
+            var popped = myStack.Pop();
+            if (popped == 2)
+            {
+                Console.WriteLine("Yuhu... Found the value I pushed! :-D ");
+            }
+
+            myStack.Push(0);
+            myStack.Push(3);
+            myStack.Push(4);
+            myStack.Push(5);
+            Console.WriteLine(myStack.Peek());
+            //myStack.Pop(); myStack.Pop(); myStack.Pop();
+
+            //Console.WriteLine(String.Format("My final write: pop={0}, size={1}", myStack.Pop(), myStack.StackSize));
+            for (int i = myStack.Count; i > 0; i--)
+            {
+                Console.WriteLine(i + " : " + myStack.Pop());
+            }
         }
     }
 }

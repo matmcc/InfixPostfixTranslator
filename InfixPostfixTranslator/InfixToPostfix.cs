@@ -13,7 +13,7 @@ namespace InfixPostfixTranslator
             //var _operandSet = new HashSet<char>(operands);
             var _operatorSet = new HashSet<char>(operators);
 
-            var _stack = new Stack<char>();
+            var _stack = new GenStack<char>();
             var tokens = infix.ToCharArray();
 
             foreach (char c in tokens)
