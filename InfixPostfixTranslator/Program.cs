@@ -1,6 +1,6 @@
 ﻿using System;
 
-//  TODO: Kepp in separate files?
+//  TODO: Keep in separate files?
 //  TODO: Resolve issue re: symbols in Expression class constructor
 
 //  TODO: Redesign InfixToPostfix.Precedence ?

@@ -18,6 +18,8 @@ showPostfix: Outputs the postfix expression
 //    potential for more breaking errors
 //    Also allowing setting these at ctor breaks validification in getInput
 
+// TODO: Overload ctor to take string or array
+
 namespace InfixPostfixTranslator
 {
     class Expression

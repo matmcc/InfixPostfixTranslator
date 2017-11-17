@@ -3,8 +3,13 @@
 // Code from: https://codereview.stackexchange.com/questions/106004/stack-implementation-in-c
 // Also: Sharp, John; Microsoft Visual C# 2013; pp.381-7
 
-//Resize is expensive part
-//Could configure this in ctor with crossover_size and ratio_to_grow
+// Resize is expensive part
+// Could configure this in ctor with crossover_size and ratio_to_grow
+
+// Built to match interface of Stack<>
+// Recommended to use Stack<> from library as it is safer and supported 
+// Should be a simple swap from GenStack<> to Stack<>
+// This is to demonstrate learning
 
 namespace InfixPostfixTranslator
 {
@@ -12,7 +17,7 @@ namespace InfixPostfixTranslator
     {
         private T[] _stack;
         private int _index;
-        private int DEFAULT_SIZE = 5;
+        private int DEFAULT_SIZE = 5;   // Beware the magic number - TODO: There must be a better way
 
         public int StackSize { get { return _stack.Length; } }
         public int Count { get { return _index; } }
