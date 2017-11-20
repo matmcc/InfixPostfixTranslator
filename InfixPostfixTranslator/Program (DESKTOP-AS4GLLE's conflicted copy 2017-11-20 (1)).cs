@@ -22,9 +22,9 @@ namespace InfixPostfixTranslator
     {
         static void Main(string[] args)
         {
-            TestRun();
+            //TestRun();
             //TestStack();
-            //Testing();
+            Testing();
         }
 
         public static void Testing()
@@ -37,20 +37,16 @@ namespace InfixPostfixTranslator
             Console.WriteLine();
 
             string test2 = "1 + 2 * (3 / 4) + (  56 - 789) /12 ";
-            string[] parts = Regex.Split(test2, @"(\s+)|(-)|(\+)|(\*)|(/)|(\()|(\))");
+            string[] parts = Regex.Split(test2, @"(\s)|(-)|(\+)|(\*)|(/)|(\()|(\))");
             foreach (var c in parts)
-            { Console.Write(c + '.'); }
+            { Console.WriteLine(c); }
             Console.WriteLine();
 
-            // This is The One!
-            string test3 = "1 + 2 * (3 / 4) + (  56 - 789) /12 ";
-            string[] found = Regex.Split(test3, @"(\W)");
+            string test3 = "1 + 2 * (3 / 4) + (  56 - 789)";
+            string delim = " +-*/()";
+            string[] found = Regex.Split(test3, delim);
             foreach (var c in found)
-            {
-                if (!String.IsNullOrWhiteSpace(c))
-                {
-                    Console.WriteLine(c);
-                } }
+            { Console.WriteLine(c); }
         }
 
         public static void TestRun()

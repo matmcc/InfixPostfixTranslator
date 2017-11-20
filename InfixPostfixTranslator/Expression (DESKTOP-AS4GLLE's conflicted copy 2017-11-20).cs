@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 /*
@@ -63,7 +62,7 @@ namespace InfixPostfixTranslator
                 input = Console.ReadLine();
             } while (!VerifyInput(input)) ;
 
-            Infix = CleanInput(input);
+            Infix = input.Trim();
         }
 
         private bool VerifyInput(string input)
@@ -82,21 +81,6 @@ namespace InfixPostfixTranslator
             }
 
             return _allCharsAllowed;
-        }
-
-        private string CleanInput(string input)
-        {
-            string[] found = Regex.Split(input, @"(\W)");
-            StringBuilder builder = new StringBuilder();
-            foreach (var c in found)
-            {
-                if (!String.IsNullOrWhiteSpace(c))
-                {
-                    builder.Append(c).Append(" ");
-                }
-            }
-            string cleanedString = builder.ToString().Trim();
-            return cleanedString;
         }
 
         public void ConvertToPostfix(string infix)
