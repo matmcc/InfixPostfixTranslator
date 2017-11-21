@@ -116,6 +116,7 @@ namespace InfixPostfixTranslator
 
         public string ReturnInfix() => Infix;
         public string ReturnPostFix() => Postfix;
-        
+
+
     }
 }

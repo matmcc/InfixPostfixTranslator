@@ -17,48 +17,48 @@ namespace InfixPostfixTranslator
 
             foreach (var c in tokens)
             {
-                // if letter or number, push to stack
+                //if (Char.IsLetterOrDigit(c) || c == ' ')    // previously _operandSet.Contains(c)
+                //if (Char.IsLetterOrDigit(c))    // don't want whitespace?
+                //{ _postfix += c; }
                 if (Regex.IsMatch(c, @"(\w+)"))
                 {
                     _postfix += c + " ";
                 }
-
-                // if opening bracket, push to stack
                 if (c == "(")
                 { _stack.Push(c); }
-                
-                // if closing bracket...
                 else if (c == ")")
                 {
                     while (_stack.Peek() != "(")
-                    {_postfix += _stack.Pop() + " "; }    // append operators to string until "("
-                    _stack.Pop();   // discard "("
+                    {_postfix += _stack.Pop() + " "; }    // append operators to string until '('
+                    _stack.Pop();   // discard '('
                 }
-
-                // if "operator"...
                 else if (operators.Contains(c))
                 {
-                    if (_stack.Count == 0)  // if stack empty, push to stack
+                    if (_stack.Count == 0)
                     { _stack.Push(c); }
                     else
                     {
-                        while (_stack.Peek() != "(")    // traverse stack until "(" ...
+                        while (_stack.Peek() != "(")    // traverse stack until '('
                         {
-                            if (Precedence(_stack.Peek(), c))   // if precedence of next item on stack >= this then pop ...
-                            { _postfix += _stack.Pop() + " "; } // ... append to _postfix with trailing space
-                            else { break; }         // ... else if precedence !>= then break
-                            if (_stack.Count == 0)  // if stack empty then break
+                            if (Precedence(c, _stack.Peek()))   // if precedence >= then pop ...
+                            { _postfix += _stack.Pop() + " "; }
+                            else { break; }         // ... else break
+                            if (_stack.Count == 0)  // stack empty - break
                                 break;
                         }
-                        _stack.Push(c); // ... now push new operator to stack
+                        _stack.Push(c);
                     }
                 }
+                //else
+                //{
+                //    _postfix += c;  //TODO 1: moving this to here has messed up flow, needs to go back up, probably use regex
+                //}
                 // else throw exception here ?
             }
 
-            for (int i = _stack.Count; i > 0; i--)
+            for (int i = 0; i < _stack.Count; i++)
             {
-                _postfix += _stack.Pop() + " ";
+                _postfix += _stack.Pop() + " ";   //TODO 2: Then += " " here and Trim() later
             }
             _postfix.TrimEnd();
             //_postfix = String.Join(" ", _postfix.ToCharArray()); // to space _postfix TODO: But Fucks Up e.g. 100 
@@ -67,9 +67,11 @@ namespace InfixPostfixTranslator
 
         private static bool Precedence(string this_, string other)
         {
-            if (this_ == other  || this_ == "*" || this_ == "/") // quick escape
+            if (this_ == other) // quick escape
             { return true; }
-            else if (this_ == "+" || this_ == "-")
+            else if (this_ == "*" || this_ == "/")
+            { return true; }
+            else if (this_ == "+" || this_ == "-")  // could ! this to escape earlier? since */ => true
             {
                 if (other == "+" || other == "-")
                 { return true; }
