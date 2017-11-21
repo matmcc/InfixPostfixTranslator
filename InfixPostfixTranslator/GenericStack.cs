@@ -76,7 +76,7 @@ namespace InfixPostfixTranslator
             // Do not alter _index
             T returnValue = _stack[_index - 1];
 
-            // Do no reset value to a default value, instead just return
+            // Do not reset value to a default value, instead just return
             return returnValue;
         }
     }

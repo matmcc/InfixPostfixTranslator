@@ -5,22 +5,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-/*
-It is recommended you design an ‘Expression’ class that stores the infix and postfix strings.
-That class should include the following methods:
-getInfix: Stores the infix expression.
-showInfix: Outputs the infix expression.
-showPostfix: Outputs the postfix expression
-*/
-
-
-//Notes
-//    allowing setting of AllowedSymbols at any time complicates other parts of program - e.g. testing and pushing to stack
-//    potential for more breaking errors
-//    Also allowing setting these at ctor breaks validification in getInput
-
-// TODO: Overload ctor to take string or array
-
 namespace InfixPostfixTranslator
 {
     class Expression
@@ -28,11 +12,10 @@ namespace InfixPostfixTranslator
         private string _infix = "";
         private string _postfix = "";
         private string allowedSymbols = "()*/+-";
-
-        // TODO: Should setters be private?
-        protected string Infix { get { return _infix; } set { _infix = value; } }
-        protected string Postfix { get { return _postfix; } set { _postfix = value; } }
-        protected string AllowedSymbols { get { return allowedSymbols; } }
+        
+        public string Infix { get { return _infix; } private set { _infix = value; } }
+        public string Postfix { get { return _postfix; } private set { _postfix = value; } }
+        public string AllowedSymbols { get { return allowedSymbols; } }
 
         public Expression()
         {
@@ -43,17 +26,26 @@ namespace InfixPostfixTranslator
         {
             if (VerifyInput(infix))
             {
-                this.Infix = infix;
+                this.Infix = CleanInput(infix);
             }
             else
             {
                 this.Infix = "";
             }
         }
-        // TODO: input checking below does not apply to string arg's to constructor - inconsistent, should they be removed?
 
+        public Expression(string[] infix)
+        {
+            if (VerifyInput(infix))
+            {
+                this.Infix = CleanInput(infix);
+            }
+            else
+            {
+                this.Infix = "";
+            }
+        }
 
-        // Old comment // TODO: Below checks input - do we want this testing here? or later, e.g. in translator? Fail Fast - here
         public void GetInfix()
         {
             string input = "";
@@ -84,11 +76,43 @@ namespace InfixPostfixTranslator
             return _allCharsAllowed;
         }
 
+        private bool VerifyInput(string[] input)
+        {
+            bool _allCharsAllowed = false;
+            foreach (var c in input)
+            {
+                // Currently allows letters, numbers, whitespace, AllowedSymbols as input
+                if (Regex.IsMatch(c, @"(\w+)|(\s+)") || AllowedSymbols.Contains(c))
+                { _allCharsAllowed = true; }
+                else
+                {
+                    Console.WriteLine($"Invalid input: {c}. Only letters, numbers and symbols: {AllowedSymbols} are valid input");
+                    return false;
+                }
+            }
+
+            return _allCharsAllowed;
+        }
+
         private string CleanInput(string input)
         {
             string[] found = Regex.Split(input, @"(\W)");
             StringBuilder builder = new StringBuilder();
             foreach (var c in found)
+            {
+                if (!String.IsNullOrWhiteSpace(c))
+                {
+                    builder.Append(c).Append(" ");
+                }
+            }
+            string cleanedString = builder.ToString().Trim();
+            return cleanedString;
+        }
+
+        private string CleanInput(string[] input)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var c in input)
             {
                 if (!String.IsNullOrWhiteSpace(c))
                 {
