@@ -16,14 +16,17 @@ using System.Text.RegularExpressions;
 
 //  TODO: Are all control-flow designed to exit early in the best way? i.e. most likely bool-test first?
 
+// TODO: Sort out verbose mode
+
 namespace InfixPostfixTranslator
 {
     class Program
     {
         static void Main(string[] args)
         {
-            TestRun();
+            //TestRun();
             //TestStack();
+            TestStackLinked();
             //Testing();
         }
 
@@ -48,9 +51,8 @@ namespace InfixPostfixTranslator
             foreach (var c in found)
             {
                 if (!String.IsNullOrWhiteSpace(c))
-                {
-                    Console.WriteLine(c);
-                } }
+                { Console.WriteLine(c); }
+            }
         }
 
         public static void TestRun()
@@ -101,13 +103,77 @@ namespace InfixPostfixTranslator
             myStack.Push(4);
             myStack.Push(5);
             Console.WriteLine(myStack.Peek());
-            //myStack.Pop(); myStack.Pop(); myStack.Pop();
 
-            //Console.WriteLine(String.Format("My final write: pop={0}, size={1}", myStack.Pop(), myStack.StackSize));
             for (int i = myStack.Count; i > 0; i--)
             {
                 Console.WriteLine(i + " : " + myStack.Pop());
             }
+        }
+
+        public static void TestStackLinked()
+        {
+            var myStack = new GenStackL<int>();
+
+            try
+            {
+                myStack.Pop();
+            }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("Hooray, it was empty and failed. :-)");
+            }
+
+            myStack.Push(1);
+            myStack.Push(2);
+            var popped = myStack.Pop();
+            if (popped == 2)
+            {
+                Console.WriteLine("Yuhu... Found the value I pushed! :-D ");
+            }
+
+            myStack.Push(0);
+            myStack.Push(3);
+            myStack.Push(4);
+            myStack.Push(5);
+            Console.WriteLine($"Peeking at top value: {myStack.Peek()}");
+
+            Console.WriteLine("Testing ToArray() ...");
+            int[] returnedArray = myStack.ToArray();
+            foreach (var item in returnedArray)
+            {
+                Console.Write($"{item} ");
+            }
+
+            Console.WriteLine("\nTesting IEnumerable ...");
+            foreach (var item in myStack)
+            {
+                Console.Write($"{item} ");
+            }
+
+            Console.WriteLine("\nTesting Contains()...");
+            var last = myStack.ToArray()[myStack.Count-1];
+            Console.WriteLine($"Last item in stack: {last}");
+            Console.WriteLine($"Stack contains {last}: {myStack.Contains(last)}");
+
+            Console.WriteLine("\nPopopopopop ...");
+            for (int i = myStack.Count; i > 0; i--)
+            {
+                Console.WriteLine(i + " : " + myStack.Pop());
+            }
+
+            try
+            {
+                var myStackNull = new GenStackL<string>(null);
+            }
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("Cannot pass null to constructor\n");
+            }
+
+            var myStack2 = new GenStackL<string>(new string[] { "alice", "bradley", "claire", "daniel", "edith" });
+            foreach (var item in myStack2)
+            { Console.WriteLine(item); }
+
         }
     }
 }
