@@ -1,16 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 
-// Code from: https://codereview.stackexchange.com/questions/106004/stack-implementation-in-c
-// Also: Sharp, John; Microsoft Visual C# 2013; pp.381-7
+// TODO: Currently full of horrible verbose hacks - FIX THIS
 
+// Built to resemble functionality and interface of Stack<T>
+// Made generic as this would be useful in a collection class
+// Recommended to use Stack<T> from library as it is safer, more functional, supported
+// List-based stack has more functionality implemented to more closely match that in .NET framework...
+// ...but both have necessary functionality for purposes of InfixToPostfix class.
+// Should be a simple swap from GenStack<T> to Stack<T>
+// This is to demonstrate learning
+
+// Code/info from:
+// Sharp, John; Microsoft Visual C# 2013; pp.381-7
+// Michaelis, Mark & Lippert, Eric; Essential C# 6.0; pp.455-504
+// MSDN .NET Framework Class Library - Stack<T> Class: https://msdn.microsoft.com/en-us/library/3278tedw(v=vs.110).aspx
+// Linked-list-based stack: week 9 lecture (not publically accessible) ...
+// ... https://canvas.anglia.ac.uk/courses/724/files/204804?module_item_id=96350
+// Array-based stack: https://codereview.stackexchange.com/questions/106004/stack-implementation-in-c
+
+// Both have similar Big-O cost
+// TODO: Neaither currently implement interfaces.
+
+// TODO: CHECK Class Name here
+// Array-based stack
 // Resize is expensive part
 // Could configure this in ctor with crossover_size and ratio_to_grow
 
-// Built to match interface of Stack<>
-// Recommended to use Stack<> from library as it is safer and supported 
-// Should be a simple swap from GenStack<> to Stack<>
-// This is to demonstrate learning
+// TODO: CHECK Class Name here
+// List-based stack
+// Implemented more functionality
+// Does not have expense of array-resize
+// Uncertain if Garbage Collector will deal less effectively with this than with array-based stack ...
+// ... may be horrible memory hog (IDisposable not implemented)
 
 namespace InfixPostfixTranslator
 {
@@ -192,9 +214,9 @@ namespace InfixPostfixTranslator
             { throw new InvalidOperationException("The stack is empty"); }
             else
             {
-                foreach (var n in this)
+                foreach (var _node in this)
                 {
-                    if (n.Equals(item))
+                    if (_node.Equals(item))
                     { return true; }
                 }
                 return false;

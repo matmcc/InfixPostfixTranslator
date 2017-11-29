@@ -18,15 +18,17 @@ using System.Text.RegularExpressions;
 
 // TODO: Sort out verbose mode
 
+// TODO: Parentheses checker
+
 namespace InfixPostfixTranslator
 {
     class Program
     {
         static void Main(string[] args)
         {
-            //TestRun();
+            TestRun();
             //TestStack();
-            TestStackLinked();
+            //TestStackLinked();
             //Testing();
         }
 
