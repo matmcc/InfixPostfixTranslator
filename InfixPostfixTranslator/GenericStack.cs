@@ -22,38 +22,36 @@ using System.Collections.Generic;
 // Both have similar Big-O cost
 // TODO: Neaither currently implement interfaces.
 
-// TODO: CHECK Class Name here
+// Stack_ArrayBased<T>
 // Array-based stack
 // Resize is expensive part
 // Could configure this in ctor with crossover_size and ratio_to_grow
 
-// TODO: CHECK Class Name here
-// List-based stack
+// Stack_LinkedListBased<T>
+// SinglyLinkedList-based stack
 // Implemented more functionality
 // Does not have expense of array-resize
 // Uncertain if Garbage Collector will deal less effectively with this than with array-based stack ...
-// ... may be horrible memory hog (IDisposable not implemented)
+// ... may hog memory (IDisposable not implemented)
 
 namespace InfixPostfixTranslator
 {
-    public class GenStack<T>
+    public class Stack_ArrayBased<T>
     {
         private T[] _stack;
         private int _index;
         private int DEFAULT_SIZE = 5;   // Beware the magic number - TODO: There must be a better way
-        private bool _verbose = false;
-
+        
         public int StackSize { get { return _stack.Length; } }
         public int Count { get { return _index; } }
 
-        public GenStack(bool verbose = false)
+        public Stack_ArrayBased()
         {
             _stack = new T[DEFAULT_SIZE];
             _index = 0;
-            _verbose = verbose;
         }
 
-        public GenStack(int stackSize)
+        public Stack_ArrayBased(int stackSize)
         {
             if (stackSize < 0)
                 throw new ArgumentOutOfRangeException("Requires a positive stack size");
@@ -61,21 +59,7 @@ namespace InfixPostfixTranslator
             _stack = new T[stackSize];
             _index = 0;
         }
-
-        public GenStack(int stackSize, bool verbose)
-        {
-            if (stackSize < 0)
-                throw new ArgumentOutOfRangeException("Requires a positive stack size");
-
-            _stack = new T[stackSize];
-            _index = 0;
-            _verbose = verbose;
-            if (_verbose)
-            {
-                Console.WriteLine($"New GenStack, init array size: {StackSize}");
-            }
-        }
-
+        
         public void Push(T value)
         {
             // Don't reallocate before we actually want to push to it
@@ -86,18 +70,10 @@ namespace InfixPostfixTranslator
                 Array.Resize(ref _stack, _stack.Length < 100
                                              ? 2 * _stack.Length
                                              : (int)(_stack.Length * 1.2)); // Magic numbers - could be set in ctor at top
-                if (_verbose)
-                {
-                    Console.WriteLine($"Resize internal array from {oldLength} to {StackSize}");
-                }
             }
 
             // Store the value, and increase reference afterwards
             _stack[_index++] = value;
-            if (_verbose)
-            {
-                Console.WriteLine($"Pushed item: {value}");
-            }
         }
 
         public T Pop()
@@ -111,11 +87,6 @@ namespace InfixPostfixTranslator
 
             // As a safety/security measure, reset value to a default value
             _stack[_index] = default(T);
-
-            if (_verbose)
-            {
-                Console.WriteLine($"Popped item: {returnValue}");
-            }
 
             return returnValue;
         }
@@ -134,7 +105,7 @@ namespace InfixPostfixTranslator
         }
     }
 
-    class GenStackL<T>
+    class Stack_LinkedListBased<T>
     {
         private class Node<T>
         {
@@ -151,14 +122,14 @@ namespace InfixPostfixTranslator
         private Node<T> start, end;
         public int Count { get; set; }
 
-        public GenStackL()
+        public Stack_LinkedListBased()
         {
             start = null;
             end = null;
             Count = 0;
         }
 
-        public GenStackL(IEnumerable<T> collection)
+        public Stack_LinkedListBased(IEnumerable<T> collection)
         {
             if (collection == null)
             { throw new ArgumentNullException("collection is null"); }

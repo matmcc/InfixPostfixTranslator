@@ -11,7 +11,7 @@ namespace InfixPostfixTranslator
             string _postfix = "";
             string operators = "*/+-";
             
-            var _stack = new GenStackL<string>();
+            var _stack = new Stack_LinkedListBased<string>();
             //var tokens = infix.ToCharArray();   // Breaks with numbers >1 digit
             var tokens = infix.Split();
 

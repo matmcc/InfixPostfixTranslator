@@ -20,16 +20,19 @@ using System.Text.RegularExpressions;
 
 // TODO: Parentheses checker
 
+// TODO: Does expression need refactoring into UserInput and Expression ?
+
 namespace InfixPostfixTranslator
 {
     class Program
     {
         static void Main(string[] args)
         {
-            TestRun();
+            //TestRun();
             //TestStack();
             //TestStackLinked();
             //Testing();
+            //TestMatchedParentheses.Test();
         }
 
         public static void Testing()
@@ -74,14 +77,14 @@ namespace InfixPostfixTranslator
 
             try
             {
-                new GenStack<int>(-500);
+                new Stack_ArrayBased<int>(-500);
             }
             catch (ArgumentOutOfRangeException)
             {
                 Console.WriteLine("Hooray, couldn't create a negative sized stack");
             }
 
-            var myStack = new GenStack<int>(3);
+            var myStack = new Stack_ArrayBased<int>(3);
 
             try
             {
@@ -114,7 +117,7 @@ namespace InfixPostfixTranslator
 
         public static void TestStackLinked()
         {
-            var myStack = new GenStackL<int>();
+            var myStack = new Stack_LinkedListBased<int>();
 
             try
             {
@@ -165,14 +168,14 @@ namespace InfixPostfixTranslator
 
             try
             {
-                var myStackNull = new GenStackL<string>(null);
+                var myStackNull = new Stack_LinkedListBased<string>(null);
             }
             catch (ArgumentNullException)
             {
                 Console.WriteLine("Cannot pass null to constructor\n");
             }
 
-            var myStack2 = new GenStackL<string>(new string[] { "alice", "bradley", "claire", "daniel", "edith" });
+            var myStack2 = new Stack_LinkedListBased<string>(new string[] { "alice", "bradley", "claire", "daniel", "edith" });
             foreach (var item in myStack2)
             { Console.WriteLine(item); }
 

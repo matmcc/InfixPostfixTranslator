@@ -46,6 +46,7 @@
     <Compile Include="Expression.cs" />
     <Compile Include="GenericStack.cs" />
     <Compile Include="InfixToPostfix.cs" />
+    <Compile Include="MatchedParentheses.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
