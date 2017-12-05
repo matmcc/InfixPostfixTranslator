@@ -123,10 +123,10 @@ namespace InfixPostfixTranslator
             return cleanedString;
         }
 
-        public void ConvertToPostfix(string infix)
-        {
-            Postfix = InfixToPostfix.Convert(infix);
-        }
+        //public void ConvertToPostfix(string infix)
+        //{
+        //    Postfix = InfixToPostfix.Convert(infix);
+        //}
 
         public void ShowInfix()
         {

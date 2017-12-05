@@ -1,26 +1,35 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
+// OLD COMMENTS - for write-up
 //  TODO: Keep in separate files?
 //  TODO: Resolve issue re: symbols in Expression class constructor
 
-//  TODO: Redesign InfixToPostfix.Precedence ?
+// CHECKLIST
 //  TODO: Is everything as private as possible?
 //  TODO: Are scopes as minimal as is practical?
+//  TODO: Are all control-flow designed to exit early in the best way? i.e. most likely bool-test first?
+
+// JOBS:
+//  Separating out Expression and UserInterface would make this less fragile/linked
+//  ... e.g. enable re-run, changes to one without other
+//  ... but expression includes some verification which should belong there to work with ctor
+//  Could refactor Regex out into methods so that this is more easily changed if required ...
+//  ... this could help with ...
+//  Creating a class that contains a symbol, and knows it's type, could be an alternative to using strings
+//  ... e.g. symbol.data = "*"; symbol.type = "operator"; ... or data = "("; type = "("
+
+//  TODO: Verbose mode for stack creation ? Using events ?
+//  TODO: Does expression need refactoring into UserInput and Expression ?
+//  TODO: Build RunAgain into UserInput ?
+//  TODO: Redesign InfixToPostfix.Precedence ? ... Considered IComparable but this implies sortable - do not want
+//  TODO: Interfaces?
 
 //  TODO: Learn how to, then write unit tests
 //  TODO: Learn how to, then write xml tagged comments/documentation
 
-//  TODO: Is this structured as it should be?
 //  TODO: Create class diagrams
 
-//  TODO: Are all control-flow designed to exit early in the best way? i.e. most likely bool-test first?
-
-// TODO: Sort out verbose mode
-
-// TODO: Parentheses checker
-
-// TODO: Does expression need refactoring into UserInput and Expression ?
 
 namespace InfixPostfixTranslator
 {
@@ -29,6 +38,7 @@ namespace InfixPostfixTranslator
         static void Main(string[] args)
         {
             //TestRun();
+            TestRunOO();
             //TestStack();
             //TestStackLinked();
             //Testing();
@@ -60,16 +70,31 @@ namespace InfixPostfixTranslator
             }
         }
 
-        public static void TestRun()
+        //public static void TestRun()
+        //{
+        //    var expressionInstance = new Expression();
+        //    expressionInstance.GetInfix();
+        //    Console.WriteLine("The Infix you have entered is :");
+        //    expressionInstance.ShowInfix();
+        //    Console.WriteLine("The Postfix equivalent is :");
+        //    var returnedPostfix = expressionInstance.ReturnInfix();
+        //    expressionInstance.ConvertToPostfix(returnedPostfix);
+        //    expressionInstance.ShowPostfix();
+        //}
+
+        public static void TestRunOO()
         {
-            var expressionInstance = new Expression();
-            expressionInstance.GetInfix();
-            Console.WriteLine("The Infix you have entered is :");
-            expressionInstance.ShowInfix();
-            Console.WriteLine("The Postfix equivalent is :");
-            var returnedPostfix = expressionInstance.ReturnInfix();
-            expressionInstance.ConvertToPostfix(returnedPostfix);
-            expressionInstance.ShowPostfix();
+            var UiInstance = new UserInterface();
+            UiInstance.Run();
+            //UiInstance.GetInfix();
+            //string userInput = UiInstance.Infix;
+            //var expressionOO = new ExpressionOO(userInput);
+            //Console.WriteLine("\nThe Infix you have entered is :");
+            //expressionOO.ShowInfix();
+            //var converter = new InfixToPostfixOO(expressionOO.Infix, true);
+            //converter.Convert();
+            //Console.WriteLine("\nThe Postfix equivalent is :");
+            //Console.WriteLine(converter._Postfix);
         }
 
         public static void TestStack()

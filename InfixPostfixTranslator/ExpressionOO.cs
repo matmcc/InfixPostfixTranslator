@@ -14,15 +14,38 @@ namespace InfixPostfixTranslator
 
         public string Postfix { get { return _postfix; } private set { _postfix = value; } }
         private string _postfix;
-
-        public string AllowedSymbols { get { return _allowedSymbols; } }
-        private string _allowedSymbols;
-
-        UserInterface()
+        
+        private ExpressionOO expression;
+        private bool runAgain;
+        
+        public UserInterface()
         {
             this.Infix = "";
             this.Postfix = "";
-            this._allowedSymbols = "()*/+-";
+            this.expression = new ExpressionOO();
+        }
+
+        public UserInterface(bool runAgain) : this()
+        { this.runAgain = runAgain; }
+
+        public void Run()
+        {
+            string input = "";
+            do
+            {
+                GetInfix();
+                ShowInfix();
+                GetPostfix();
+                ShowInfix();
+                ShowPostfix();
+                do
+                {
+                    Console.WriteLine("Run again?: Y/N");
+                    input = Console.ReadKey().Key.ToString().ToLower();
+                    Console.WriteLine();
+                } while (!(input == "y" || input == "n"));
+                runAgain = (input == "y");
+            } while (runAgain);
         }
 
         public void GetInfix()
@@ -32,102 +55,65 @@ namespace InfixPostfixTranslator
             {
                 Console.WriteLine("Enter infix expression: ");
                 input = Console.ReadLine();
-            } while (!VerifyInput(input));
+            } while (!expression.VerifyInput(input));
 
-            Infix = CleanInput(input);
+            expression.Infix = input;
+            Infix = expression.Infix;
         }
 
-        private bool VerifyInput(string input)
+        public void GetPostfix()
         {
-            bool _allCharsAllowed = false;
-            foreach (var c in input)
+            string input;
+            do
             {
-                // Currently allows letters, numbers, whitespace, AllowedSymbols as input
-                if (Char.IsLetterOrDigit(c) || Char.IsWhiteSpace(c) || AllowedSymbols.Contains(c))
-                { _allCharsAllowed = true; }
-                else
-                {
-                    Console.WriteLine($"Invalid input: {c}. Only letters, numbers and symbols: {AllowedSymbols} are valid input");
-                    return false;
-                }
-            }
+                Console.WriteLine("Run (V)erbose or (S)ilent?");
+                input = Console.ReadKey().Key.ToString().ToLower(); // Gets case-insensitive key input...
+                Console.WriteLine();
+            } while (!(input == "v" || input == "s"));  // ... to use here
 
-            return _allCharsAllowed;
+            bool verbosemode = true ? (input == "v") : false;
+            expression.ConvertToPostfix(verbosemode);
+            Postfix = expression.Postfix;
         }
 
-        private string CleanInput(string input)
+        public void ShowInfix()
         {
-            string[] found = Regex.Split(input, @"(\W)");
-            StringBuilder builder = new StringBuilder();
-            foreach (var c in found)
-            {
-                if (!String.IsNullOrWhiteSpace(c))
-                {
-                    builder.Append(c).Append(" ");
-                }
-            }
-            string cleanedString = builder.ToString().Trim();
-            return cleanedString;
+            Console.WriteLine($"\nThe Infix you entered is :\n{Infix}\n");
         }
-    }
 
-    class Symbol
-    {
-        private string _data;
-        private bool _isSymbol;
-        private string _symbols = "()*/+-";
-
-        Symbol(string data)
+        public void ShowPostfix()
         {
-            _data = data;
-            if (_symbols.Contains(data))
-            { _isSymbol = true; }
-            else { _isSymbol = false; }
+            Console.WriteLine($"\nThe Postfix equivalent is :\n{Postfix}\n");
         }
-    }
-
-    class SymbolStack
-    {
-
     }
 
     class ExpressionOO
     {
         private string _infix = "";
+        public string Infix { get { return _infix; }
+            set { if (VerifyInput(value)) { _infix = CleanInput(value); } } }
+
         private string _postfix = "";
-        private string allowedSymbols = "()*/+-";
-        
-        public string Infix { get { return _infix; } private set { _infix = value; } }
         public string Postfix { get { return _postfix; } private set { _postfix = value; } }
-        public string AllowedSymbols { get { return allowedSymbols; } }
+
+        private string _allowedSymbols = "()*/+-";
+        public string AllowedSymbols { get { return _allowedSymbols; } }
 
         public ExpressionOO()
-        {
-            this.Infix = "";
-        }
+        { this.Infix = ""; }
 
         public ExpressionOO(string infix)
         {
             if (VerifyInput(infix))
-            {
-                this.Infix = CleanInput(infix);
-            }
-            else
-            {
-                this.Infix = "";
-            }
+            { this.Infix = CleanInput(infix); }
+            else { this.Infix = ""; }
         }
 
         public ExpressionOO(string[] infix)
         {
             if (VerifyInput(infix))
-            {
-                this.Infix = CleanInput(infix);
-            }
-            else
-            {
-                this.Infix = "";
-            }
+            { this.Infix = CleanInput(infix); }
+            else { this.Infix = ""; }
         }
 
         public void GetInfix()
@@ -142,7 +128,7 @@ namespace InfixPostfixTranslator
             Infix = CleanInput(input);
         }
 
-        private bool VerifyInput(string input)
+        public bool VerifyInput(string input)
         {
             bool _allCharsAllowed = false;
             foreach (var c in input)
@@ -152,11 +138,10 @@ namespace InfixPostfixTranslator
                 { _allCharsAllowed = true; }
                 else
                 {
-                    Console.WriteLine($"Invalid input: {c}. Only letters, numbers and symbols: {AllowedSymbols} are valid input");
+                    Console.WriteLine($"Invalid input: {c}\nOnly letters, numbers and symbols: {AllowedSymbols} are valid input");
                     return false;
                 }
             }
-
             return _allCharsAllowed;
         }
 
@@ -174,7 +159,6 @@ namespace InfixPostfixTranslator
                     return false;
                 }
             }
-
             return _allCharsAllowed;
         }
 
@@ -207,23 +191,17 @@ namespace InfixPostfixTranslator
             return cleanedString;
         }
 
-        public void ConvertToPostfix(string infix)
+        public void ConvertToPostfix(bool verbosemode = false)
         {
-            Postfix = InfixToPostfix.Convert(infix);
+            InfixToPostfixOO converter = new InfixToPostfixOO(Infix, verbosemode);
+            Postfix = converter.Convert();
         }
 
-        public void ShowInfix()
+        public void ConvertToPostfix2(bool verbosemode = false)
         {
-            Console.WriteLine(Infix);
+            InfixToPostfix converter = new InfixToPostfix(Infix, verbosemode);
+            Postfix = converter.Convert();
         }
 
-        public void ShowPostfix()
-        {
-            Console.WriteLine(Postfix);
-        }
-
-        public string ReturnInfix() => Infix;
-        public string ReturnPostFix() => Postfix;
-        
     }
 }

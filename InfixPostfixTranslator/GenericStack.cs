@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-
-// TODO: Currently full of horrible verbose hacks - FIX THIS
 
 // Built to resemble functionality and interface of Stack<T>
 // Made generic as this would be useful in a collection class
 // Recommended to use Stack<T> from library as it is safer, more functional, supported
-// List-based stack has more functionality implemented to more closely match that in .NET framework...
+// List-based stack has more functionality implemented to more closely match Stack<T> in .NET framework...
 // ...but both have necessary functionality for purposes of InfixToPostfix class.
-// Should be a simple swap from GenStack<T> to Stack<T>
+// Should be a simple swap from either class here to Stack<T>
 // This is to demonstrate learning
 
 // Code/info from:
@@ -20,7 +19,6 @@ using System.Collections.Generic;
 // Array-based stack: https://codereview.stackexchange.com/questions/106004/stack-implementation-in-c
 
 // Both have similar Big-O cost
-// TODO: Neaither currently implement interfaces.
 
 // Stack_ArrayBased<T>
 // Array-based stack
@@ -29,10 +27,12 @@ using System.Collections.Generic;
 
 // Stack_LinkedListBased<T>
 // SinglyLinkedList-based stack
-// Implemented more functionality
+// Implemented more functionality to achieve greater similarity with Stack<T>:
+// overloaded constructor, ToArray and CopyTo, iterator-based IEnumerable<T> ...
+// ... but not Add(), Remove(), Clear(), IsReadOnly from ICollection<> - remove() does not fit with stack design.
+// ... also not ICollection - no sync methods and CopyTo() is not explicitly implemented.
 // Does not have expense of array-resize
 // Uncertain if Garbage Collector will deal less effectively with this than with array-based stack ...
-// ... may hog memory (IDisposable not implemented)
 
 namespace InfixPostfixTranslator
 {
@@ -105,7 +105,7 @@ namespace InfixPostfixTranslator
         }
     }
 
-    class Stack_LinkedListBased<T>
+    class Stack_LinkedListBased<T> : IEnumerable<T>, IEnumerable
     {
         private class Node<T>
         {
@@ -142,7 +142,7 @@ namespace InfixPostfixTranslator
             }
         }
 
-        public void Push(T data)
+        public virtual void Push(T data)
         {
             Node<T> current = new Node<T>(data);
             if (end == null)
@@ -158,7 +158,7 @@ namespace InfixPostfixTranslator
             Count++;
         }
         
-        public T Pop()
+        public virtual T Pop()
         {
             Node<T> current = start;
             if (start == null)
@@ -204,6 +204,11 @@ namespace InfixPostfixTranslator
             }
         }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
         public T[] ToArray()
         {
             T[] ret = new T[Count];
@@ -222,7 +227,17 @@ namespace InfixPostfixTranslator
             }
             return ret;
         }
-        
+
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            if (start == null)
+            { throw new InvalidOperationException("The stack is empty"); }
+            else
+            {
+                this.ToArray().CopyTo(array, arrayIndex);
+            }
+        }
+
     }
     
 }

@@ -4,23 +4,42 @@ using System.Text.RegularExpressions;
 
 namespace InfixPostfixTranslator
 {
-    internal class InfixToPostfix
+    class InfixToPostfix
     {
-        internal static string Convert(string infix)
+        bool _verbose;
+        string operators = "*/+-";
+
+        private string _infix = "";
+        public string Infix { get => _infix; set => _infix = value; }
+
+        private string _postfix = "";
+        public string Postfix
         {
-            string _postfix = "";
-            string operators = "*/+-";
-            
-            var _stack = new Stack_LinkedListBased<string>();
+            get { return _postfix; }
+            set {
+                _postfix = value;
+                if (_verbose) { Console.WriteLine("{0, -20}{1}", "Building postfix: ", Postfix); }
+                }
+        }
+
+        public InfixToPostfix(string input)
+        { Infix = input; }
+
+        public InfixToPostfix(string input, bool verbosemode) : this(input)
+        { _verbose = verbosemode; }
+
+        public string Convert()
+        {
+            var _stack = _verbose ? new StackVerbose<string>() : new Stack_LinkedListBased<string>();
             //var tokens = infix.ToCharArray();   // Breaks with numbers >1 digit
-            var tokens = infix.Split();
+            var tokens = Infix.Split();
 
             foreach (var c in tokens)
             {
                 // if letter or number, push to stack
                 if (Regex.IsMatch(c, @"(\w+)"))
                 {
-                    _postfix += c + " ";
+                    Postfix += c + " ";
                 }
 
                 // if opening bracket, push to stack
@@ -31,7 +50,7 @@ namespace InfixPostfixTranslator
                 else if (c == ")")
                 {
                     while (_stack.Peek() != "(")
-                    {_postfix += _stack.Pop() + " "; }    // append operators to string until "("
+                    {Postfix += _stack.Pop() + " "; }    // append operators to string until "("
                     _stack.Pop();   // discard "("
                 }
 
@@ -45,7 +64,7 @@ namespace InfixPostfixTranslator
                         while (_stack.Peek() != "(")    // traverse stack until "(" ...
                         {
                             if (Precedence(_stack.Peek(), c))   // if precedence of next item on stack >= this then pop ...
-                            { _postfix += _stack.Pop() + " "; } // ... append to _postfix with trailing space
+                            { Postfix += _stack.Pop() + " "; } // ... append to _postfix with trailing space
                             else { break; }         // ... else if precedence !>= then break
                             if (_stack.Count == 0)  // if stack empty then break
                                 break;
@@ -58,11 +77,12 @@ namespace InfixPostfixTranslator
 
             for (int i = _stack.Count; i > 0; i--)
             {
-                _postfix += _stack.Pop() + " ";
+                Postfix += _stack.Pop() + " ";
             }
-            _postfix.TrimEnd();
+            Postfix.TrimEnd();
+            Postfix += "\n";
             //_postfix = String.Join(" ", _postfix.ToCharArray()); // to space _postfix TODO: But Fucks Up e.g. 100 
-            return _postfix;
+            return Postfix;
         }
 
         private static bool Precedence(string this_, string other)
