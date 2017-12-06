@@ -5,10 +5,20 @@ using System.Threading.Tasks;
 
 namespace InfixPostfixTranslator
 {
-    class InfixToPostfixOO
+    /// <summary>
+    /// Converts Infix string to Postfix string.
+    /// Call Convert() to update and return Postfix.
+    /// If verbosemode set in ctor, prints infix to postfix conversion process.
+    /// </summary>
+    public class InfixToPostfixOO
     {
-        bool _verbose;
-        string _postfix = "";
+        private bool _verbose;
+        private string operators = "*/+-";
+
+        /// <summary>
+        /// Postfix string property.
+        /// If verbosemode set in ctor, setter prints when called
+        /// </summary>
         public string Postfix
         {
             get { return _postfix; }
@@ -18,10 +28,11 @@ namespace InfixPostfixTranslator
                 if (_verbose) { Console.WriteLine("{0, -20}{1}", "Building postfix: ", Postfix); }
             }
         }
+        private string _postfix = "";
 
-        string operators = "*/+-";
         Symbol[] symbols;
 
+#region Constructors
         public InfixToPostfixOO(string input)
         {
             string[] _infix = input.Split();
@@ -31,12 +42,23 @@ namespace InfixPostfixTranslator
             { symbols[i] = new Symbol(_infix[i]); }
         }
 
+        /// <summary>
+        /// if verbosemode == true, will print Infix to Postfix conversion process
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="verbosemode">if true, Convert() will print conversion process</param>
         public InfixToPostfixOO(string input, bool verbosemode) : this(input)
         {
             _verbose = verbosemode;
         }
+        #endregion
 
-        internal string Convert()
+        /// <summary>
+        /// Converts Infix into postfix notation, sets and returns Postfix.
+        /// If verbosemode set in ctor, prints conversion process
+        /// </summary>
+        /// <returns></returns>
+        public string Convert()
         {
             var _stack = _verbose ? new StackVerbose<Symbol>(): new Stack_LinkedListBased<Symbol>();
 
@@ -56,6 +78,7 @@ namespace InfixPostfixTranslator
                 else if (s.Data == ")")
                 {
                     while (_stack.Peek().Data != "(")
+                        // TODO: surround next with try except block in case _stack.Count == 0 
                     { Postfix += _stack.Pop() + " "; }    // append operators to string until "("
                     _stack.Pop();   // discard "("
                 }
@@ -70,7 +93,7 @@ namespace InfixPostfixTranslator
                         while (_stack.Peek().Data != "(")    // traverse stack until "(" ...
                         {
                             if (_stack.Peek() >= s)   // if precedence of next item on stack >= this then pop ...
-                            { Postfix += _stack.Pop() + " "; } // ... append to _postfix with trailing space
+                            { Postfix += _stack.Pop() + " "; } // ... append to Postfix with trailing space
                             else { break; }         // ... else if precedence !>= then break
                             if (_stack.Count == 0)  // if stack empty then break
                                 break;
@@ -90,20 +113,6 @@ namespace InfixPostfixTranslator
             //_postfix = String.Join(" ", _postfix.ToCharArray()); // to space _postfix TODO: But Fucks Up e.g. 100 
             return Postfix;
         }
-
-        //private static bool Precedence(string this_, string other)
-        //{
-        //    if (this_ == other || this_ == "*" || this_ == "/") // quick escape
-        //    { return true; }
-        //    else if (this_ == "+" || this_ == "-")
-        //    {
-        //        if (other == "+" || other == "-")
-        //        { return true; }
-        //        else
-        //        { return false; }
-        //    }
-        //    else { return false; }
-        //}
-
+        
     }
 }

@@ -4,15 +4,23 @@ using System.Text.RegularExpressions;
 
 namespace InfixPostfixTranslator
 {
-    class InfixToPostfix
+    /// <summary>
+    /// Converts Infix string to Postfix string.
+    /// Call Convert() to update and return Postfix.
+    /// If verbosemode set in ctor, prints infix to postfix conversion process.
+    /// </summary>
+    public class InfixToPostfix
     {
-        bool _verbose;
-        string operators = "*/+-";
+        private bool _verbose;
+        private string operators = "*/+-";
 
-        private string _infix = "";
         public string Infix { get => _infix; set => _infix = value; }
+        private string _infix = "";
 
-        private string _postfix = "";
+        /// <summary>
+        /// Postfix string property.
+        /// If verbosemode set in ctor, setter prints when called
+        /// </summary>
         public string Postfix
         {
             get { return _postfix; }
@@ -21,17 +29,31 @@ namespace InfixPostfixTranslator
                 if (_verbose) { Console.WriteLine("{0, -20}{1}", "Building postfix: ", Postfix); }
                 }
         }
+        private string _postfix = "";
 
+
+        #region Constructors
         public InfixToPostfix(string input)
         { Infix = input; }
 
+        /// <summary>
+        /// If verbosemode == true, prints infix to postfix conversion process
+        /// </summary>
+        /// <param name="input"></param>
+        /// <param name="verbosemode">if true, prints infix to postfix conversion process</param>
         public InfixToPostfix(string input, bool verbosemode) : this(input)
         { _verbose = verbosemode; }
+#endregion
 
+        /// <summary>
+        /// Converts Infix into postfix notation, sets and returns Postfix.
+        /// If verbosemode set in ctor, prints conversion process
+        /// </summary>
+        /// <returns></returns>
         public string Convert()
         {
             var _stack = _verbose ? new StackVerbose<string>() : new Stack_LinkedListBased<string>();
-            //var tokens = infix.ToCharArray();   // Breaks with numbers >1 digit
+            //OLD: var tokens = infix.ToCharArray();   // Breaks with numbers >1 digit
             var tokens = Infix.Split();
 
             foreach (var c in tokens)
@@ -75,16 +97,23 @@ namespace InfixPostfixTranslator
                 // else throw exception here ?
             }
 
+            // Pop remaining stack items
             for (int i = _stack.Count; i > 0; i--)
             {
                 Postfix += _stack.Pop() + " ";
             }
             Postfix.TrimEnd();
             Postfix += "\n";
-            //_postfix = String.Join(" ", _postfix.ToCharArray()); // to space _postfix TODO: But Fucks Up e.g. 100 
+            //OLD: _postfix = String.Join(" ", _postfix.ToCharArray()); // to space _postfix TODO: But Fucks Up e.g. 100 
             return Postfix;
         }
 
+        /// <summary>
+        /// Compares symbols: this to other. Returns true if >= else false
+        /// </summary>
+        /// <param name="this_"></param>
+        /// <param name="other"></param>
+        /// <returns></returns>
         private static bool Precedence(string this_, string other)
         {
             if (this_ == other  || this_ == "*" || this_ == "/") // quick escape

@@ -1,104 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace InfixPostfixTranslator
 {
-    class UserInterface
+    public class ExpressionOO
     {
-        public string Infix { get { return _infix; } private set { _infix = value; } }
-        private string _infix;
-
-        public string Postfix { get { return _postfix; } private set { _postfix = value; } }
-        private string _postfix;
-        
-        private ExpressionOO expression;
-        private bool runAgain;
-        
-        public UserInterface()
-        {
-            this.Infix = "";
-            this.Postfix = "";
-            this.expression = new ExpressionOO();
-        }
-
-        public UserInterface(bool runAgain) : this()
-        { this.runAgain = runAgain; }
-
-        public void Run()
-        {
-            string input = "";
-            do
-            {
-                GetInfix();
-                ShowInfix();
-                GetPostfix();
-                ShowInfix();
-                ShowPostfix();
-                do
-                {
-                    Console.WriteLine("Run again?: Y/N");
-                    input = Console.ReadKey().Key.ToString().ToLower();
-                    Console.WriteLine();
-                } while (!(input == "y" || input == "n"));
-                runAgain = (input == "y");
-            } while (runAgain);
-        }
-
-        public void GetInfix()
-        {
-            string input = "";
-            do
-            {
-                Console.WriteLine("Enter infix expression: ");
-                input = Console.ReadLine();
-            } while (!expression.VerifyInput(input));
-
-            expression.Infix = input;
-            Infix = expression.Infix;
-        }
-
-        public void GetPostfix()
-        {
-            string input;
-            do
-            {
-                Console.WriteLine("Run (V)erbose or (S)ilent?");
-                input = Console.ReadKey().Key.ToString().ToLower(); // Gets case-insensitive key input...
-                Console.WriteLine();
-            } while (!(input == "v" || input == "s"));  // ... to use here
-
-            bool verbosemode = true ? (input == "v") : false;
-            expression.ConvertToPostfix(verbosemode);
-            Postfix = expression.Postfix;
-        }
-
-        public void ShowInfix()
-        {
-            Console.WriteLine($"\nThe Infix you entered is :\n{Infix}\n");
-        }
-
-        public void ShowPostfix()
-        {
-            Console.WriteLine($"\nThe Postfix equivalent is :\n{Postfix}\n");
-        }
-    }
-
-    class ExpressionOO
-    {
-        private string _infix = "";
+#region Properties
+        /// <summary>
+        /// Infix string property
+        /// Setter verifies input and cleans up whitespace
+        /// </summary>
         public string Infix { get { return _infix; }
             set { if (VerifyInput(value)) { _infix = CleanInput(value); } } }
+        private string _infix = "";
 
-        private string _postfix = "";
+        /// <summary>
+        /// Postfix string property
+        /// Updated by calling ConvertToPostfix()
+        /// </summary>
         public string Postfix { get { return _postfix; } private set { _postfix = value; } }
+        private string _postfix = "";
 
-        private string _allowedSymbols = "()*/+-";
+        /// <summary>
+        /// Read-only AllowedSymbols string property: "()*/+-"
+        /// </summary>
         public string AllowedSymbols { get { return _allowedSymbols; } }
+        private string _allowedSymbols = "()*/+-";
+#endregion
 
+#region Constructors
         public ExpressionOO()
         { this.Infix = ""; }
 
@@ -115,7 +47,13 @@ namespace InfixPostfixTranslator
             { this.Infix = CleanInput(infix); }
             else { this.Infix = ""; }
         }
+#endregion
 
+#region Methods
+        /// <summary>
+        /// Gets Infix expression from Console
+        /// Verifies using VerifyInput() and cleans up whitespace
+        /// </summary>
         public void GetInfix()
         {
             string input = "";
@@ -128,6 +66,12 @@ namespace InfixPostfixTranslator
             Infix = CleanInput(input);
         }
 
+
+        /// <summary>
+        /// Verifies input string contains only letters, numbers, whitespace, allowed symbols
+        /// </summary>
+        /// <param name="input">string input to verify</param>
+        /// <returns>True if verified</returns>
         public bool VerifyInput(string input)
         {
             bool _allCharsAllowed = false;
@@ -145,6 +89,11 @@ namespace InfixPostfixTranslator
             return _allCharsAllowed;
         }
 
+        /// <summary>
+        /// Verifies input string[] contains only letters, numbers, whitespace, allowed symbols
+        /// </summary>
+        /// <param name="input">string[] input to verify</param>
+        /// <returns>True if verified</returns>
         private bool VerifyInput(string[] input)
         {
             bool _allCharsAllowed = false;
@@ -162,6 +111,16 @@ namespace InfixPostfixTranslator
             return _allCharsAllowed;
         }
 
+
+        /// <summary>
+        /// Splits input at whitespace using Regex, returns string with " " between non-whitespace inputs
+        /// </summary>
+        /// <example>
+        /// Fixes inconsistent user input so that "".Split() will separate out non-whitepsace parts of a string
+        /// <c>CleanInput("1+2 * (3 / 4) + (  56 - 789)") == "1 + 2 * ( 3 / 4 ) + ( 56 - 789 )"</c>
+        /// </example>
+        /// <param name="input"></param>
+        /// <returns></returns>
         private string CleanInput(string input)
         {
             string[] found = Regex.Split(input, @"(\W)");
@@ -177,6 +136,11 @@ namespace InfixPostfixTranslator
             return cleanedString;
         }
 
+        /// <summary>
+        /// string[] overload to split input at whitespace using Regex, returns string with " " between non-whitespace inputs
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         private string CleanInput(string[] input)
         {
             StringBuilder builder = new StringBuilder();
@@ -191,17 +155,30 @@ namespace InfixPostfixTranslator
             return cleanedString;
         }
 
+
+        //TODO: Fix separate Converter methods into one
+        /// <summary>
+        /// Creates and calls instance of InfixToPostfixOO.Convert()
+        /// Used to pass Infix prop to converter and then update Postfix prop
+        /// </summary>
+        /// <param name="verbosemode">if verbosemode == true, infix to postfix conversion process is printed to console</param>
         public void ConvertToPostfix(bool verbosemode = false)
         {
             InfixToPostfixOO converter = new InfixToPostfixOO(Infix, verbosemode);
             Postfix = converter.Convert();
         }
 
+        /// <summary>
+        /// Creates and calls instance of InfixToPostfix.Convert()
+        /// Used to pass Infix prop to converter and then update Postfix prop
+        /// </summary>
+        /// <param name="verbosemode">if verbosemode == true, infix to postfix conversion process is printed to console</param>
         public void ConvertToPostfix2(bool verbosemode = false)
         {
             InfixToPostfix converter = new InfixToPostfix(Infix, verbosemode);
             Postfix = converter.Convert();
         }
+#endregion
 
     }
 }

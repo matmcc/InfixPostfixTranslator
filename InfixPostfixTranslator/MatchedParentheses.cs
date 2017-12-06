@@ -2,9 +2,17 @@
 
 namespace InfixPostfixTranslator
 {
-    class MatchedParentheses
+    /// <summary>
+    /// Tests for balanced parentheses: '(' and ')'
+    /// Must be equal in number and in open-and-closing order
+    /// </summary>
+    public class MatchedParentheses
     {
-        
+        /// <summary>
+        /// Returns true if '(' and ')' balance, else false
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static bool IsBalanced(string input)
         {
             Stack_LinkedListBased<char> stack = new Stack_LinkedListBased<char>();

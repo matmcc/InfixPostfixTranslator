@@ -3,6 +3,10 @@ using System.Text;
 
 namespace InfixPostfixTranslator
 {
+    /// <summary>
+    /// Wrapper for stack to print items being Pushed and Popped, and stack contents
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     class StackVerbose<T> : Stack_LinkedListBased<T>
     {
         public override void Push(T data)
