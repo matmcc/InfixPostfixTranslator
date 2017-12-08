@@ -38,11 +38,11 @@ namespace InfixPostfixTranslator
         static void Main(string[] args)
         {
             //TestRun();
-            //TestRunOO();
+            TestRunOO();
             //TestStack();
             //TestStackLinked();
             //Testing();
-            TestMatchedParentheses.Test();
+            //TestMatchedParentheses.Test();
             
         }
 

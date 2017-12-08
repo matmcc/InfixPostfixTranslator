@@ -101,7 +101,7 @@ namespace InfixPostfixTranslator
             bool checkMatchedParentheses = MatchedParentheses.IsBalanced(input);
             if (!checkMatchedParentheses)
             {
-                Console.WriteLine("Invalid input: Parentheses: '(' and ')' must be balanced");
+                Console.WriteLine("Invalid input: Parentheses: '(' and ')' must be balanced\n");
                 return false;
             }
 
