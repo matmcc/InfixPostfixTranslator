@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace InfixPostfixTranslator
 {
@@ -33,6 +34,11 @@ namespace InfixPostfixTranslator
             { return true; }
             else { return false; }
         }
+
+        public static bool IsBalanced(string[] input)
+        {
+            return IsBalanced(String.Join(" ", input));
+        }
     }
 
     class TestMatchedParentheses
@@ -56,6 +62,11 @@ namespace InfixPostfixTranslator
 
             foreach (var test in tests)
             { Console.WriteLine($"{test}: {MatchedParentheses.IsBalanced(test)}"); }
+
+            foreach (var test in tests)
+            { Console.WriteLine($"Testing array overload_ {test}: {MatchedParentheses.IsBalanced(test.Split())}"); }
+
         }
+    
     }
 }

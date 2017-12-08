@@ -9,12 +9,14 @@ namespace InfixPostfixTranslator
     /// Call Convert() to update and return Postfix.
     /// If verbosemode set in ctor, prints infix to postfix conversion process.
     /// </summary>
-    public class InfixToPostfix
+    public class InfixToPostfix : IInfixToPostfix
     {
-        private bool _verbose;
         private string operators = "*/+-";
 
-        public string Infix { get => _infix; set => _infix = value; }
+        public bool VerboseMode { get { return _verbose; } set { _verbose = value; } }
+        private bool _verbose;
+
+        public string Infix { get => _infix; set { _infix = value; Postfix = ""; } }    //TODO: Note setting infix resets postfix
         private string _infix = "";
 
         /// <summary>
@@ -26,14 +28,14 @@ namespace InfixPostfixTranslator
             get { return _postfix; }
             set {
                 _postfix = value;
-                if (_verbose) { Console.WriteLine("{0, -20}{1}", "Building postfix: ", Postfix); }
+                if (VerboseMode) { Console.WriteLine("{0, -20}{1}", "Building postfix: ", Postfix); }
                 }
         }
         private string _postfix = "";
 
 
         #region Constructors
-        public InfixToPostfix(string input)
+        public InfixToPostfix(string input = "")
         { Infix = input; }
 
         /// <summary>
@@ -42,8 +44,14 @@ namespace InfixPostfixTranslator
         /// <param name="input"></param>
         /// <param name="verbosemode">if true, prints infix to postfix conversion process</param>
         public InfixToPostfix(string input, bool verbosemode) : this(input)
-        { _verbose = verbosemode; }
+        { VerboseMode = verbosemode; }
 #endregion
+
+        public string Convert(string input)
+        {
+            Infix = input;
+            return this.Convert();
+        }
 
         /// <summary>
         /// Converts Infix into postfix notation, sets and returns Postfix.
@@ -52,7 +60,7 @@ namespace InfixPostfixTranslator
         /// <returns></returns>
         public string Convert()
         {
-            var _stack = _verbose ? new StackVerbose<string>() : new Stack_LinkedListBased<string>();
+            var _stack = VerboseMode ? new StackVerbose<string>() : new Stack_LinkedListBased<string>();
             //OLD: var tokens = infix.ToCharArray();   // Breaks with numbers >1 digit
             var tokens = Infix.Split();
 
@@ -109,7 +117,7 @@ namespace InfixPostfixTranslator
         }
 
         /// <summary>
-        /// Compares symbols: this to other. Returns true if >= else false
+        /// Compares symbols: this_ to other. Returns true if precedence >= else false
         /// </summary>
         /// <param name="this_"></param>
         /// <param name="other"></param>

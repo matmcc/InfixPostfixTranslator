@@ -42,8 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExpressionOO.cs" />
     <Compile Include="Expression.cs" />
+    <Compile Include="ExpressionOLD.cs" />
     <Compile Include="GenericStack.cs" />
     <Compile Include="InfixToPostfix.cs" />
     <Compile Include="InfixToPostfixOO.cs" />

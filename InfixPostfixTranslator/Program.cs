@@ -38,11 +38,11 @@ namespace InfixPostfixTranslator
         static void Main(string[] args)
         {
             //TestRun();
-            TestRunOO();
+            //TestRunOO();
             //TestStack();
             //TestStackLinked();
             //Testing();
-            //TestMatchedParentheses.Test();
+            TestMatchedParentheses.Test();
             
         }
 
@@ -85,7 +85,7 @@ namespace InfixPostfixTranslator
 
         public static void TestRunOO()
         {
-            var UiInstance = new UserInterface();
+            var UiInstance = new UserInterface(new InfixToPostfixOO());
             UiInstance.Run();
             //UiInstance.GetInfix();
             //string userInput = UiInstance.Infix;

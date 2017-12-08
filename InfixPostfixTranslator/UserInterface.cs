@@ -10,14 +10,28 @@ namespace InfixPostfixTranslator
         public string Postfix { get { return _postfix; } private set { _postfix = value; } }
         private string _postfix;
         
-        private ExpressionOO expression;
+        private Expression expression;
         private bool runAgain;
         
         public UserInterface()
         {
             this.Infix = "";
             this.Postfix = "";
-            this.expression = new ExpressionOO();
+            this.expression = new Expression();
+        }
+
+        public UserInterface(InfixToPostfix converterObject)
+        {
+            this.Infix = "";
+            this.Postfix = "";
+            this.expression = new Expression(converterObject);
+        }
+
+        public UserInterface(InfixToPostfixOO converterObject)
+        {
+            this.Infix = "";
+            this.Postfix = "";
+            this.expression = new Expression(converterObject);
         }
 
         public UserInterface(bool runAgain) : this()
